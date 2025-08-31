@@ -52,11 +52,11 @@ macro_rules! context_as_params {
             }
         }
         $crate::seq_macro::seq!(N in 1..=$max {
-            context_as_params!(impl $ctx, N);
+            $crate::context_as_params!(impl $ctx, N);
         });
     };
 
     ($ctx: ident) => {
-        context_as_params!($ctx, 6);
+        $crate::context_as_params!($ctx, 6);
     };
 }
