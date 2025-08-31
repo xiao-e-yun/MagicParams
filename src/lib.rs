@@ -1,3 +1,6 @@
+pub use paste;
+pub use seq_macro;
+
 #[macro_export]
 macro_rules! define_context {
     ($ctx: ident {
@@ -7,7 +10,7 @@ macro_rules! define_context {
             $(pub $field: $type),*
         }
 
-        paste::paste! {
+        $crate::paste::paste! {
             pub trait [< From $ctx >] {
                 fn from_context(ctx: &$ctx) -> Self;
             }
@@ -26,8 +29,8 @@ macro_rules! define_context {
 #[macro_export]
 macro_rules! context_as_params {
     (impl $ctx: ident, $max: expr) => {
-        seq_macro::seq!(N in 1..=$max {
-            paste::paste! {
+        $crate::seq_macro::seq!(N in 1..=$max {
+            $crate::paste::paste! {
                 impl<F, #(T~N,)*> [< $ctx Handler >]<(#(T~N,)*)> for F
                 where
                     F: Fn(#(T~N,)*),
@@ -45,12 +48,12 @@ macro_rules! context_as_params {
     };
 
     ($ctx: ident, $max: expr) => {
-        paste::paste! {
+        $crate::paste::paste! {
             trait [< $ctx Handler >]<T> {
                 fn call(self, ctx: &$ctx);
             }
         }
-        seq_macro::seq!(N in 1..=$max {
+        $crate::seq_macro::seq!(N in 1..=$max {
             context_as_params!(impl $ctx, N);
         });
     };
