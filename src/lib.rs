@@ -47,7 +47,7 @@ macro_rules! context_as_params {
 
     ($ctx: ident, $max: expr) => {
         $crate::paste::paste! {
-            trait [< $ctx Handler >]<T, O> {
+            pub trait [< $ctx Handler >]<T, O> {
                 fn call(self, ctx: &$ctx) -> O;
             }
         }
