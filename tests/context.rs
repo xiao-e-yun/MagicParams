@@ -34,17 +34,19 @@ fn test_handlers() {
         value3: "Hello".to_string(),
     };
 
-    fn handler(txt: String, fifty: i32) {
+    fn handler(txt: String, fifty: i32) -> String {
         assert_eq!(txt, "Hello");
         assert_eq!(fifty, 50);
+        "World".to_string()
     }
 
     let closures= |v1: i32, v2: u32, v3: String| {
         assert_eq!(v1, 50);
         assert_eq!(v2, 100);
         assert_eq!(v3, "Hello");
+        2025
     };
 
-    handler.call(&ctx);
-    closures.call(&ctx);
+    assert_eq!(handler.call(&ctx), "World".to_string());
+    assert_eq!(closures.call(&ctx), 2025);
 }

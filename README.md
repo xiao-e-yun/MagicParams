@@ -28,8 +28,9 @@ fn main() {
         assert_eq!(v1, 42);
         assert_eq!(v2, 100);
         assert_eq!(v3, "Hello");
+        "Handler called successfully"
     };
 
-    handler.call(&ctx);
+    assert_eq!(handler.call(&ctx), "Handler called successfully");
 }
 ```

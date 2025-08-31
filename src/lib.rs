@@ -31,15 +31,13 @@ macro_rules! context_as_params {
     (impl $ctx: ident, $max: expr) => {
         $crate::seq_macro::seq!(N in 1..=$max {
             $crate::paste::paste! {
-                impl<F, #(T~N,)*> [< $ctx Handler >]<(#(T~N,)*)> for F
+                impl<F, #(T~N,)* O> [< $ctx Handler >]<(#(T~N,)*), O> for F
                 where
-                    F: Fn(#(T~N,)*),
+                    F: Fn(#(T~N,)*) -> O,
                     #(T~N: [< From $ctx >],)*
                 {
-                    fn call(self, ctx: &$ctx) {
-                        (self)(
-                            #(T~N::from_context(&ctx),)*
-                        );
+                    fn call(self, ctx: &$ctx) -> O {
+                        (self)(#(T~N::from_context(&ctx),)*)
                     }
                 }
             }
@@ -49,8 +47,8 @@ macro_rules! context_as_params {
 
     ($ctx: ident, $max: expr) => {
         $crate::paste::paste! {
-            trait [< $ctx Handler >]<T> {
-                fn call(self, ctx: &$ctx);
+            trait [< $ctx Handler >]<T, O> {
+                fn call(self, ctx: &$ctx) -> O;
             }
         }
         $crate::seq_macro::seq!(N in 1..=$max {
